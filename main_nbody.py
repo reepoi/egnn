@@ -6,6 +6,7 @@ import os
 from torch import nn, optim
 import json
 import time
+import utils
 
 parser = argparse.ArgumentParser(description='VAE MNIST Example')
 parser.add_argument('--exp_name', type=str, default='exp_1', metavar='N', help='experiment_name')
@@ -30,6 +31,10 @@ parser.add_argument('--nf', type=int, default=64, metavar='N',
                     help='learning rate')
 parser.add_argument('--model', type=str, default='egnn_vel', metavar='N',
                     help='available models: gnn, baseline, linear, linear_vel, se3_transformer, egnn_vel, rf_vel, tfn')
+parser.add_argument('--save-model', type=bool, default=True,
+                    help='save the best model so far each epoch')
+parser.add_argument('--save-model-dir', type=str,
+                    help='where to save the model each epoch (see --save-model)')
 parser.add_argument('--attention', type=int, default=0, metavar='N',
                     help='attention in the ae model')
 parser.add_argument('--n_layers', type=int, default=4, metavar='N',
@@ -97,6 +102,7 @@ def main():
     loader_test = torch.utils.data.DataLoader(dataset_test, batch_size=args.batch_size, shuffle=False, drop_last=False)
 
 
+    # raise ValueError(args.model)
     if args.model == 'gnn':
         model = GNN(input_dim=6, hidden_nf=args.nf, n_layers=args.n_layers, device=device, recurrent=True)
     elif args.model == 'egnn_vel':
@@ -136,6 +142,8 @@ def main():
                 best_val_loss = val_loss
                 best_test_loss = test_loss
                 best_epoch = epoch
+                if args.save_model:
+                    utils.save_model(model, args.save_model_dir, args.exp_name)
             print("*** Best Val Loss: %.5f \t Best Test Loss: %.5f \t Best epoch %d" % (best_val_loss, best_test_loss, best_epoch))
 
         json_object = json.dumps(results, indent=4)

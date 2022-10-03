@@ -6,6 +6,8 @@ from torch import nn
 from ..se3_dynamics.models import OurSE3Transformer, OursTFN
 from .utils.utils_profiling import * # load before other local modules
 
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
 
 class OurDynamics(torch.nn.Module):
     def __init__(self, n_particles, n_dimesnion, nf=16, n_layers=3, act_fn=nn.ReLU(), model="se3_transformer", num_degrees=4, div=1):
@@ -128,7 +130,7 @@ def array_to_graph(xs):
         # example has shape [N, D=3]
 
         # Create graph (connections only, no bond or feature information yet)
-        G = dgl.DGLGraph((indices_src, indices_dst))
+        G = dgl.DGLGraph((indices_src, indices_dst)).to(device)
 
         ### add bond & feature information to graph
         G.ndata['x'] = example  # node positions [N, ...]

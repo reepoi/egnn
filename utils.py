@@ -70,3 +70,21 @@ def adjust_learning_rate(optimizer, epoch, lr_0, factor=0.5, epochs_decay=100):
     lr = lr_0 * (factor ** (epoch // epochs_decay))
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
+
+
+def save_model(model, dir, id, gpu=""):
+    """ Save a model """
+    os.makedirs(dir, exist_ok=True)
+    if gpu != "":
+        gpu = "_" + str(gpu)
+
+    torch.save(model.state_dict(), os.path.join(dir, id + gpu + ".pt"))
+
+
+def load_model(model, dir, id, gpu=""):
+    """ Load a state dict into a model """
+    if gpu != "":
+        gpu = "_" + str(gpu)
+    state_dict = torch.load(os.path.join(dir, id + gpu + ".pt"))
+    model.load_state_dict(state_dict)
+    return model
