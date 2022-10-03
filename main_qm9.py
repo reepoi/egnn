@@ -45,6 +45,10 @@ parser.add_argument('--node_attr', type=int, default=0, metavar='N',
                     help='node_attr or not')
 parser.add_argument('--weight_decay', type=float, default=1e-16, metavar='N',
                     help='weight decay')
+parser.add_argument('--save-model', type=bool, default=True,
+                    help='save the best model so far each epoch')
+parser.add_argument('--save-model-dir', type=str,
+                    help='where to save the model each epoch (see --save-model)')
 
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
@@ -131,6 +135,8 @@ if __name__ == "__main__":
                 res['best_val'] = val_loss
                 res['best_test'] = test_loss
                 res['best_epoch'] = epoch
+                if args.save_model:
+                    utils.save_model(model, args.save_model_dir, args.exp_name)
             print("Val loss: %.4f \t test loss: %.4f \t epoch %d" % (val_loss, test_loss, epoch))
             print("Best: val loss: %.4f \t test loss: %.4f \t epoch %d" % (res['best_val'], res['best_test'], res['best_epoch']))
 
