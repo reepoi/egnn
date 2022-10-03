@@ -8,7 +8,7 @@ import utils
 import json
 
 parser = argparse.ArgumentParser(description='QM9 Example')
-parser.add_argument('--exp_name', type=str, default='exp_1', metavar='N',
+parser.add_argument('--exp-name', type=str, default='exp_1', metavar='N',
                     help='experiment_name')
 parser.add_argument('--batch_size', type=int, default=96, metavar='N',
                     help='input batch size for training (default: 128)')
