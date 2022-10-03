@@ -41,6 +41,10 @@ parser.add_argument('--K', type=int, default=8, metavar='N',
                     help='learning rate')
 parser.add_argument('--model', type=str, default='ae_egnn', metavar='N',
                     help='available models: ae | ae_rf | ae_egnn | baseline')
+parser.add_argument('--save-model', type=bool, default=True,
+                    help='save the best model so far each epoch')
+parser.add_argument('--save-model-dir', type=str,
+                    help='where to save the model each epoch (see --save-model)')
 parser.add_argument('--attention', type=int, default=0, metavar='N',
                     help='attention in the ae model')
 parser.add_argument('--noise_dim', type=int, default=0, metavar='N',
@@ -200,6 +204,8 @@ if __name__ == "__main__":
                 best_bce_val = res_val['bce']
                 best_res_test = res_test
                 best_epoch = epoch
+                if args.save_model:
+                    utils.save_model(model, args.save_model_dir, args.exp_name)
             print("###############\n### Best result is: bce: %.4f, wrong_edges %d, error: %.4f, epoch %d" % (best_res_test['bce'],
                                                                                      best_res_test['wrong_edges'],
                                                                                      best_res_test['wrong_edges']/best_res_test['possible_edges'],
