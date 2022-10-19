@@ -52,7 +52,24 @@ export CUDA_VISIBLE_DEVICES=7
 export MODEL=se3_transformer
 export LOG_DIR=../out/egnn/nbody
 python -u main_nbody.py --exp_name "$MODEL" --model "$MODEL" --max_training_samples 3000 --div 1 --degree 3 --nf 64 --lr 5e-3 --save-model true --save-model-dir "$LOG_DIR" > "$LOG_DIR"/"$MODEL".log
-```    
+```
+
+*Linear*
+```
+export CUDA_VISIBLE_DEVICES=2
+export MODEL=linear
+export LOG_DIR=../out/egnn/nbody
+python -u main_nbody.py --exp_name "$MODEL" --model "$MODEL" --max_training_samples 3000 --lr 1e-3 --save-model true --save-model-dir "$LOG_DIR" > "$LOG_DIR"/"$MODEL".log
+```
+
+*Linear with Velocity*
+```
+export CUDA_VISIBLE_DEVICES=3
+export MODEL=linear_vel
+export LOG_DIR=../out/egnn/nbody
+python -u main_nbody.py --exp_name "$MODEL" --model "$MODEL" --max_training_samples 3000 --lr 1e-3 --save-model true --save-model-dir "$LOG_DIR" > "$LOG_DIR"/"$MODEL".log
+```
+
 
 #### N-body system sweep experiment
 For the experiment where we sweep over different amounts of training samples you should create a larger training dataset
